@@ -9,7 +9,7 @@ interface CloudinaryResult {
 }
 
 cloudinary.config({
-  cloud_name: import.meta.env.CLOUDINARY_CLOUD_NAME,
+  cloud_name: import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: import.meta.env.CLOUDINARY_API_KEY,
   api_secret: import.meta.env.CLOUDINARY_API_SECRET,
 });
@@ -30,10 +30,17 @@ export const POST: APIRoute = async ({ request }) => {
         {
           folder: 'retro-os',
           upload_preset: import.meta.env.CLOUDINARY_UPLOAD_PRESET,
-          unsigned: true, // <--- Fuerza el modo unsigned para evitar el 403
         },
         (error, result) => {
-          // ... resto de tu lógica
+          if (error) {
+            reject(error);
+            return;
+          }
+          if (!result) {
+            reject(new Error('Cloudinary no devolvio resultado'));
+            return;
+          }
+          resolve(result as CloudinaryResult);
         }
       ).end(buffer);
     });

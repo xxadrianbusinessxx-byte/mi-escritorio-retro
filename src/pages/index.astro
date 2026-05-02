@@ -186,47 +186,35 @@
       `).join('');
     }
 
-async function uploadImage(file) {
-  if (!file) return;
+    async function uploadImage(file) {
+      if (!file) return;
 
-  const uploadBtn = document.getElementById('upload-btn');
-  const originalText = uploadBtn?.innerHTML;
-  if (uploadBtn) {
-    uploadBtn.innerHTML = '⏳ SUBIENDO...';
-    uploadBtn.disabled = true;
-  }
+      const uploadBtn = document.getElementById('upload-btn');
+      const formData = new FormData();
+      formData.append('file', file);
 
-  // --- NUEVO CÓDIGO: Subida directa a Cloudinary ---
-  const url = `https://api.cloudinary.com/v1_1/${import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'retro_uploads'); // <-- Tu Upload Preset
+      try {
+        if (uploadBtn) uploadBtn.disabled = true;
+        const response = await fetch('/api/upload.json', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Imagen subida con éxito:', data.secure_url);
-      await loadImages(); // Recarga la galería
-    } else {
-      const errorData = await response.json();
-      console.error('Error de Cloudinary:', errorData);
-      alert(`Error al subir: ${errorData.error?.message || 'Desconocido'}`);
+        if (response.ok) {
+          console.log('Imagen en la nube:', data.url);
+          await loadImages();
+        } else {
+          const msg = typeof data.error === 'string' ? data.error : 'Error al subir';
+          console.error('Detalle del error:', msg);
+          alert(`Error: ${msg}`);
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+      } finally {
+        if (uploadBtn) uploadBtn.disabled = false;
+      }
     }
-  } catch (error) {
-    console.error('Error de red:', error);
-    alert('Hubo un problema de red al subir la imagen.');
-  } finally {
-    if (uploadBtn) {
-      uploadBtn.innerHTML = originalText;
-      uploadBtn.disabled = false;
-    }
-  }
-}
 
     function setupUpload() {
       const uploadBtn = document.getElementById('upload-btn');

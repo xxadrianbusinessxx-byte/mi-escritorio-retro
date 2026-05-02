@@ -186,35 +186,54 @@
       `).join('');
     }
 
-    async function uploadImage(file) {
-      if (!file) return;
+async function uploadImage(file) {
+  if (!file) return;
 
-      const uploadBtn = document.getElementById('upload-btn');
-      const formData = new FormData();
-      formData.append('file', file);
+  const uploadBtn = document.getElementById('upload-btn');
+  
+  // 1. REEMPLAZA CON TUS DATOS REALES DE CLOUDINARY
+  const CLOUD_NAME = 'tu_cloud_name'; // Lo ves en tu dashboard de Cloudinary
+  const UPLOAD_PRESET = 'retro_uploads'; // El nombre del preset UNSIGNED que creaste
 
-      try {
-        if (uploadBtn) uploadBtn.disabled = true;
-        const response = await fetch('/api/upload.json', {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await response.json();
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', UPLOAD_PRESET);
 
-        if (response.ok) {
-          console.log('Imagen en la nube:', data.url);
-          await loadImages();
-        } else {
-          const msg = typeof data.error === 'string' ? data.error : 'Error al subir';
-          console.error('Detalle del error:', msg);
-          alert(`Error: ${msg}`);
-        }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } finally {
-        if (uploadBtn) uploadBtn.disabled = false;
-      }
+  try {
+    if (uploadBtn) {
+      uploadBtn.innerHTML = '⏳ SUBIENDO...';
+      uploadBtn.disabled = true;
     }
+
+    // 2. CAMBIO CRÍTICO: La URL ahora es de Cloudinary, no de tu API
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log('¡Subida directa exitosa!', data.secure_url);
+      
+      // 3. OPCIONAL: Si necesitas guardar la URL en tu base de datos, 
+      // puedes llamar a tu API interna enviando SOLO el string de la URL (que no pesa nada)
+      // await fetch('/api/save-db.json', { method: 'POST', body: JSON.stringify({ url: data.secure_url }) });
+
+      await loadImages(); // Recargar galería
+    } else {
+      console.error('Error de Cloudinary:', data.error.message);
+      alert(`Error de Cloudinary: ${data.error.message}`);
+    }
+  } catch (error) {
+    console.error('Error de red:', error);
+  } finally {
+    if (uploadBtn) {
+      uploadBtn.innerHTML = '📤 SUBIR IMAGEN';
+      uploadBtn.disabled = false;
+    }
+  }
+}
 
     function setupUpload() {
       const uploadBtn = document.getElementById('upload-btn');

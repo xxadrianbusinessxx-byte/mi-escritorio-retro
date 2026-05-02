@@ -8,20 +8,21 @@ cloudinary.config({
 });
 
 export const GET: APIRoute = async () => {
+  console.log('🔍 Consultando Cloudinary...');
   try {
     const result = await cloudinary.api.resources({
       type: 'upload',
-      prefix: 'retro-os/',     // La carpeta que elegiste en el upload preset
+      prefix: 'retro-os/',        // Si no pusiste folder, borra esta línea o déjala como ''
       max_results: 100,
     });
-    const images = result.resources.map((resource: any) => ({
-      url: resource.secure_url,
-      filename: resource.public_id.replace('retro-os/', ''),
-      format: resource.format,
+    const images = result.resources.map((r: any) => ({
+      url: r.secure_url,
+      filename: r.public_id.replace('retro-os/', ''),
+      format: r.format,
     }));
     return new Response(JSON.stringify(images), { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ error: 'No se pudieron cargar las imágenes' }), { status: 500 });
+  } catch (err: any) {
+    console.error('❌ Error de Cloudinary:', err.message);
+    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 };

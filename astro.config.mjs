@@ -1,7 +1,10 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-// https://astro.build/config
+import vercel from '@astrojs/vercel';
+
 export default defineConfig({
-  output: 'server', // o 'hybrid'
-  integrations: [tailwind()]
+  // En v6, 'output: server' es clave para que Vercel use funciones serverless
+  output: 'server',
+  adapter: vercel(),
+  integrations: [tailwind()],
 });

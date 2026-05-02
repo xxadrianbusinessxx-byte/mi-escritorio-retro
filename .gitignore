@@ -1,4 +1,16 @@
+# Dependencias
 node_modules/
+
+# Carpetas de compilación (¡ESTO ES LO QUE ESTÁ CAUSANDO EL CRASH!)
+.vercel/
 dist/
 .astro/
+
+# Variables de entorno
 .env
+.env.production
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

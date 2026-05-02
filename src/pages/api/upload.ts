@@ -30,19 +30,10 @@ export const POST: APIRoute = async ({ request }) => {
         {
           folder: 'retro-os',
           upload_preset: import.meta.env.CLOUDINARY_UPLOAD_PRESET,
+          unsigned: true, // <--- Fuerza el modo unsigned para evitar el 403
         },
         (error, result) => {
-          if (error) {
-            reject(error);
-            return;
-          }
-
-          if (!result) {
-            reject(new Error('Cloudinary no devolvio resultado'));
-            return;
-          }
-
-          resolve(result as CloudinaryResult);
+          // ... resto de tu lógica
         }
       ).end(buffer);
     });

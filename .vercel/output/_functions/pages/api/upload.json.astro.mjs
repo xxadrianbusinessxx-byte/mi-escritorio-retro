@@ -1,4 +1,5 @@
 import { v2 } from 'cloudinary';
+export { renderers } from '../../renderers.mjs';
 
 v2.config({
   cloud_name: "dbkeikl8i",

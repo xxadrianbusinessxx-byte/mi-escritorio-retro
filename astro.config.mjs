@@ -3,8 +3,7 @@ import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  // En v6, 'output: server' es clave para que Vercel use funciones serverless
-  output: 'server',
+  output: 'server', // Esto es vital para habilitar las funciones en Vercel
   adapter: vercel(),
   integrations: [tailwind()],
 });

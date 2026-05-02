@@ -1,21 +1,8 @@
-import { c as createComponent } from './astro-component_LbKyy6XL.mjs';
+/* empty css                                 */
+import { e as createComponent, k as renderHead, l as renderScript, r as renderTemplate } from '../chunks/astro/server_DA6TaOPd.mjs';
 import 'piccolore';
-import { n as createRenderInstruction, o as renderHead, r as renderTemplate } from './entrypoint_DBXMGn5g.mjs';
 import 'clsx';
-
-async function renderScript(result, id) {
-  const inlined = result.inlinedScripts.get(id);
-  let content = "";
-  if (inlined != null) {
-    if (inlined) {
-      content = `<script type="module">${inlined}</script>`;
-    }
-  } else {
-    const resolved = await result.resolve(id);
-    content = `<script type="module" src="${result.userAssetsBase ? (result.base === "/" ? "" : result.base) + result.userAssetsBase : ""}${resolved}"></script>`;
-  }
-  return createRenderInstruction({ type: "script", id, content });
-}
+export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
   return renderTemplate`<html lang="es"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Retro OS v1.0 🐬</title>${renderHead()}</head> <body class="min-h-screen overflow-hidden relative p-4 md:p-8"> <div class="crt-overlay"></div> <div class="absolute inset-0 opacity-25 pointer-events-none" style="background-image: radial-gradient(var(--hot-pink) 1.5px, transparent 1px); background-size: 25px 25px;"></div> <div class="window relative z-10 w-full max-w-3xl mx-auto bg-[--win-gray] win-outset shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]"> <div class="bg-gradient-to-r from-[--hot-pink] to-[#ff69b4] px-2 py-1 flex justify-between items-center m-0.5"> <div class="flex items-center gap-2"> <span class="text-white font-bold tracking-widest text-xl drop-shadow-md">📁 SYSTEM_EXPLORER.EXE</span> </div> <div class="flex gap-1"> <button class="bg-[--win-gray] win-outset px-2 py-0.5 text-xs font-bold active:win-inset">_</button> <button class="bg-[--win-gray] win-outset px-2 py-0.5 text-xs font-bold active:win-inset">X</button> </div> </div> <div class="flex gap-4 px-4 py-1 text-sm border-b border-gray-400"> <span class="hover:underline cursor-pointer">File</span> <span class="hover:underline cursor-pointer">Edit</span> <span class="hover:underline cursor-pointer">View</span> <span class="hover:underline cursor-pointer">Help</span> </div> <div class="p-4"> <div class="bg-white win-inset p-4 min-h-[350px] overflow-y-auto max-h-[500px]"> <!-- Cabecera con botón de subida --> <div class="flex justify-between items-center mb-4 border-b border-gray-300 pb-2"> <h2 class="text-2xl text-[--hot-pink]">ÍNDICE DE RECURSOS VISUALES</h2> <button id="upload-btn" class="bg-[--win-gray] win-outset px-3 py-1 text-sm font-bold hover:bg-white active:win-inset transition-all">

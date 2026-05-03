@@ -189,49 +189,35 @@
 async function uploadImage(file) {
   if (!file) return;
 
-  const uploadBtn = document.getElementById('upload-btn');
-  
-  // 1. REEMPLAZA CON TUS DATOS REALES DE CLOUDINARY
-  const CLOUD_NAME = 'dbkeikl8i'; // Lo ves en tu dashboard de Cloudinary
-  const UPLOAD_PRESET = 'retro_uploads'; // El nombre del preset UNSIGNED que creaste
+  const CLOUD_NAME = 'dbkeikl8i'; // <--- Pon tu Cloud Name real
+  const UPLOAD_PRESET = 'retro-uploads'; // <--- EL NOMBRE QUE CREASTE EN CLOUDINARY
 
   const formData = new FormData();
+  
+  // EL ORDEN IMPORTA EN ALGUNAS VERSIONES DE LA API:
   formData.append('file', file);
-  formData.append('upload_preset', UPLOAD_PRESET);
+  formData.append('upload_preset', UPLOAD_PRESET); // <--- DEBE SER ESTA KEY EXACTA
 
   try {
-    if (uploadBtn) {
-      uploadBtn.innerHTML = '⏳ SUBIENDO...';
-      uploadBtn.disabled = true;
-    }
-
-    // 2. CAMBIO CRÍTICO: La URL ahora es de Cloudinary, no de tu API
-    const response = await fetch(`https://api.cloudinary.com/v1_1/dbkeikl8i/upload`, {
+    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
+    
+    const response = await fetch(url, {
       method: 'POST',
-      body: formData,
+      body: formData, // NO agregues headers manuales como 'Content-Type'
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      console.log('¡Subida directa exitosa!', data.secure_url);
-      
-      // 3. OPCIONAL: Si necesitas guardar la URL en tu base de datos, 
-      // puedes llamar a tu API interna enviando SOLO el string de la URL (que no pesa nada)
-      // await fetch('/api/save-db.json', { method: 'POST', body: JSON.stringify({ url: data.secure_url }) });
-
-      await loadImages(); // Recargar galería
+      console.log('¡Subida exitosa!', data.secure_url);
+      await loadImages(); 
     } else {
-      console.error('Error de Cloudinary:', data.error.message);
+      // Si falla, aquí verás el mensaje detallado
+      console.error('Detalle técnico:', data.error.message);
       alert(`Error de Cloudinary: ${data.error.message}`);
     }
   } catch (error) {
     console.error('Error de red:', error);
-  } finally {
-    if (uploadBtn) {
-      uploadBtn.innerHTML = '📤 SUBIR IMAGEN';
-      uploadBtn.disabled = false;
-    }
   }
 }
 

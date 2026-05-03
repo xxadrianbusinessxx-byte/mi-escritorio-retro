@@ -192,7 +192,7 @@ async function uploadImage(file) {
   const uploadBtn = document.getElementById('upload-btn');
   
   // 1. REEMPLAZA CON TUS DATOS REALES DE CLOUDINARY
-  const CLOUD_NAME = 'tu_cloud_name'; // Lo ves en tu dashboard de Cloudinary
+  const CLOUD_NAME = 'dbkeikl8i'; // Lo ves en tu dashboard de Cloudinary
   const UPLOAD_PRESET = 'retro_uploads'; // El nombre del preset UNSIGNED que creaste
 
   const formData = new FormData();
@@ -206,7 +206,7 @@ async function uploadImage(file) {
     }
 
     // 2. CAMBIO CRÍTICO: La URL ahora es de Cloudinary, no de tu API
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/dbkeikl8i/upload`, {
       method: 'POST',
       body: formData,
     });

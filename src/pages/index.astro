@@ -1,9 +1,14 @@
+---
+import SkillsRadar from '../components/SkillsRadar.astro';
+---
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
   <title>Retro OS v1.0 🐬</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.16/dist/typed.umd.js"></script>
   <style is:global>
     @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
     
@@ -39,6 +44,18 @@
       border: 2px solid;
       border-color: #808080 #ffffff #ffffff #808080;
     }
+
+    /* Cursor Typed.js (parpadeo estilo terminal) */
+    .typed-welcome-host .typed-cursor {
+      color: #fff;
+      font-weight: bold;
+      margin-left: 1px;
+      animation: typed-welcome-blink 0.65s step-end infinite;
+    }
+    @keyframes typed-welcome-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
   </style>
 </head>
 
@@ -55,8 +72,11 @@
     <div class="flex-1">
       <div class="bg-[--win-gray] win-outset shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)]">
         <div class="bg-gradient-to-r from-[--hot-pink] to-[#585858] px-3 py-1.5 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-white font-bold text-lg">📀 BIENVENIDO AL REPOSITORIO</span>
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-white font-bold text-lg inline-flex items-baseline gap-1.5 min-w-0 typed-welcome-host">
+              <span class="shrink-0" aria-hidden="true">📀</span>
+              <span id="typed-welcome-title" class="inline-block text-left min-h-[1.25em] max-w-[min(100%,22rem)]"></span>
+            </span>
           </div>
           <div class="flex gap-1">
             <div class="w-4 h-4 bg-[--win-gray] win-outset"></div>
@@ -99,6 +119,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Ventana: niveles de habilidades (radar) -->
+  <SkillsRadar python={88} sql={82} ia={90} js={85} />
 
   <!-- ========== VENTANA PRINCIPAL SYSTEM EXPLORER ========== -->
   <div class="window relative z-10 w-full max-w-5xl mx-auto bg-[--win-gray] win-outset shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)]">
@@ -310,11 +333,28 @@
       refreshBtn.addEventListener('click', () => updateRandomImage());
     }
 
+    function setupTypedWelcome() {
+      const el = document.getElementById('typed-welcome-title');
+      if (!el || typeof Typed === 'undefined') return;
+      new Typed(el, {
+        strings: ['Repositorio Imágenes 7w7', 'Database Explorer v1.0'],
+        typeSpeed: 55,
+        backSpeed: 42,
+        backDelay: 2000,
+        startDelay: 350,
+        loop: true,
+        smartBackspace: true,
+        showCursor: true,
+        cursorChar: '▌',
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       loadImages();
       setupUploadButton();
       setupRandomButton();
       setupYouTube();
+      setupTypedWelcome();
     });
   </script>
 </body>

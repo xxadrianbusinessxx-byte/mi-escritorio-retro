@@ -1,0 +1,95 @@
+---
+export interface Props {
+  python?: number;
+  sql?: number;
+  ia?: number;
+  js?: number;
+}
+
+const { python = 88, sql = 82, ia = 90, js = 85 } = Astro.props;
+---
+
+<div class="relative z-10 max-w-5xl mx-auto mb-6">
+  <div class="bg-[--win-gray] win-outset shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)] max-w-md mx-auto md:mx-0">
+    <div class="bg-gradient-to-r from-[--hot-pink] to-[#585858] px-3 py-1.5 flex items-center justify-between">
+      <span class="text-white font-bold text-lg tracking-wide">📊 SKILLS_RADAR.EXE</span>
+      <div class="flex gap-1">
+        <div class="w-4 h-4 bg-[--win-gray] win-outset"></div>
+        <div class="w-4 h-4 bg-[--win-gray] win-outset"></div>
+      </div>
+    </div>
+    <div class="p-4 bg-[#e8e8e8]">
+      <p class="text-center text-sm text-gray-700 mb-3">Niveles (escala 0–100)</p>
+      <div class="win-inset bg-white p-3 flex justify-center">
+        <canvas id="skills-radar-canvas" width="320" height="280" class="max-w-full h-auto"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ python, sql, ia, js }}>
+  function initSkillsRadar() {
+    const canvas = document.getElementById('skills-radar-canvas');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    const pink = 'rgb(185, 17, 59)';
+    const pinkFill = 'rgba(185, 17, 59, 0.25)';
+
+    new Chart(canvas, {
+      type: 'radar',
+      data: {
+        labels: ['Python', 'SQL', 'IA', 'JS'],
+        datasets: [
+          {
+            label: 'Nivel',
+            data: [python, sql, ia, js],
+            fill: true,
+            backgroundColor: pinkFill,
+            borderColor: pink,
+            borderWidth: 2,
+            pointBackgroundColor: pink,
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: pink,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              font: { family: 'VT323', size: 16 },
+              color: '#444',
+            },
+          },
+        },
+        scales: {
+          r: {
+            min: 0,
+            max: 100,
+            ticks: {
+              stepSize: 20,
+              font: { family: 'VT323', size: 14 },
+              color: '#555',
+            },
+            grid: { color: 'rgba(0,0,0,0.12)' },
+            angleLines: { color: 'rgba(0,0,0,0.15)' },
+            pointLabels: {
+              font: { family: 'VT323', size: 16 },
+              color: '#333',
+            },
+          },
+        },
+      },
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSkillsRadar);
+  } else {
+    initSkillsRadar();
+  }
+</script>
